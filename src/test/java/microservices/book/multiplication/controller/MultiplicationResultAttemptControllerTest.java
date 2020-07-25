@@ -21,7 +21,6 @@ import org.springframework.test.web.servlet.MockMvc;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 
-import microservices.book.multiplication.controller.MultiplicationResultAttemptController.ResultResponse;
 import microservices.book.multiplication.domain.Multiplication;
 import microservices.book.multiplication.domain.MultiplicationResultAttempt;
 import microservices.book.multiplication.domain.User;
@@ -38,7 +37,6 @@ public class MultiplicationResultAttemptControllerTest {
 	private MockMvc mvc;
 	
 	private JacksonTester<MultiplicationResultAttempt> jsonResult;
-	private JacksonTester<ResultResponse> jsonResponse;
 	
 	@Before
 	public void setUp() {
@@ -63,7 +61,7 @@ public class MultiplicationResultAttemptControllerTest {
 		
 		User user = new User("john");
 		Multiplication multiplication = new Multiplication(50, 70);
-		MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3500);
+		MultiplicationResultAttempt attempt = new MultiplicationResultAttempt(user, multiplication, 3500,false);
 		
 		// when
 		MockHttpServletResponse response = mvc.perform(post("/results")
@@ -74,7 +72,7 @@ public class MultiplicationResultAttemptControllerTest {
 		// then
 		assertThat(response.getStatus()).isEqualTo(HttpStatus.OK.value());
 		assertThat(response.getContentAsString()).isEqualTo(
-			jsonResponse.write(new ResultResponse(correct)).getJson()
+				jsonResult.write(new MultiplicationResultAttempt(attempt.getUser(), attempt.getMultiplication(), attempt.getResultAttempt(), correct)).getJson()
 		);
 	}
 }
