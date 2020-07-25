@@ -1,5 +1,6 @@
 package microservices.book.multiplication.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import javax.transaction.Transactional;
@@ -56,6 +57,11 @@ public class MultiplicationServiceImpl implements MultiplicationService {
 		
 		attemptRepository.save(checkedAttempt);
 		return isCorrect;
+	}
+
+	@Override
+	public List<MultiplicationResultAttempt> getStatsForUser(String userAlias) {
+		return attemptRepository.findTop5ByUserAliasOrderByIdDesc(userAlias);
 	}
 
 }
